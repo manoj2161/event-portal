@@ -24,10 +24,6 @@ const Events = () => {
   }, [category, user]);
 
   const fetchEvents = async () => {
-    const { data } = await getEvents(params);
-    console.log("EVENTS DATA:", data);
-    console.log("IS ARRAY?", Array.isArray(data));
-    setEvents(data);
     try {
       const params = {};
 
@@ -35,8 +31,6 @@ const Events = () => {
       if (search) params.search = search;
 
       const { data } = await getEvents(params);
-
-      console.log(data); // check response
 
       setEvents(data);
     } catch (error) {
