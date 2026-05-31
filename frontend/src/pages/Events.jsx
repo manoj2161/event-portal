@@ -27,14 +27,23 @@ const Events = () => {
     try {
       const params = {};
 
-      if (category !== "All") params.category = category;
-      if (search) params.search = search;
+      if (category !== "All") {
+        params.category = category;
+      }
+
+      if (search) {
+        params.search = search;
+      }
+
+      console.log("params:", params);
 
       const { data } = await getEvents(params);
 
-      setEvents(data);
+      console.log("EVENTS DATA:", data);
+
+      setEvents(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to load events");
     } finally {
       setLoading(false);
