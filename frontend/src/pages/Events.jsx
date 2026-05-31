@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import EventCard from "../components/EventCard";
 import Loader from "../components/Loader";
-import { getEventById, getEvents } from "../services/api";
+import {
+  getEvents,
+  getMyRegistrations,
+  registerForEvent
+} from "../services/api";
 import { useAuth } from "../context/AuthContext";
 const CATEGORIES = ['All', 'Tech', 'Cultural', 'Sports', 'Academic', 'Workshop', 'Other'];
 
@@ -17,9 +21,13 @@ const Events = () => {
   useEffect(() => {
     fetchEvents();
     if (user?.role === 'student') fetchMyRegistrations();
-  }, [category]);
+  }, [category, user]);
 
   const fetchEvents = async () => {
+    const { data } = await getEvents(params);
+    console.log("EVENTS DATA:", data);
+    console.log("IS ARRAY?", Array.isArray(data));
+    setEvents(data);
     try {
       const params = {};
 
@@ -39,6 +47,10 @@ const Events = () => {
     }
   };
   const fetchMyRegistrations = async () => {
+    const { data } = await getMyRegistrations();
+    console.log("REGISTRATIONS DATA:", data);
+    console.log("IS ARRAY?", Array.isArray(data));
+    setMyRegistrations(data.map(r => r.eventId?._id));
     try {
       const { data } = await getMyRegistrations();
       setMyRegistrations(data.map(r => r.eventId?._id));
